@@ -1,64 +1,65 @@
 package br.edu.faculdade.vagas;
-
+ 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
+ 
 import java.net.URI;
 import java.util.List;
-
+ 
+/**
+ * Recebe o pedido e devolve a resposta. Cada método tem uma linha.
+ *
+ * Leia o método em voz alta: "devolve as vagas". Nenhum if, nenhum for, nenhum
+ * número solto. Se aparecer algum, é regra — e regra é do servico.
+ *
+ * Nada de Vaga aparece aqui: o que entra é VagaEntrada, o que sai é
+ * VagaResposta. O modelo fica do lado de dentro.
+ */
 @RestController
 @RequestMapping("/vagas")
 public class VagaController {
-
-    private final VagaService service;
-
-    public VagaController(VagaService service) {
-        this.service = service;
+ 
+    private final VagaService servico;
+ 
+    public VagaController(VagaService servico) {
+        this.servico = servico;
     }
-
-    // Lista sempre existe, mesmo vazia — 200 direto, sem ResponseEntity.
+ 
     @GetMapping
-    public List<Vaga> listar() {
-        return service.listar();
+    public List<VagaResposta> listar() {
+        return servico.listar();
     }
-
-    // map roda se achou, orElse se não achou. O if está aí dentro —
-    // e o compilador não deixa você esquecer o segundo caso.
+ 
     @GetMapping("/{id}")
-    public ResponseEntity<Vaga> porId(@PathVariable String id) {
-        return service.buscarPorId(id)
+    public ResponseEntity<VagaResposta> porId(@PathVariable String id) {
+        return servico.buscarPorId(id)
             .map(ResponseEntity::ok)
             .orElse(ResponseEntity.notFound().build());
     }
-
-    // 201 + Location: criei, e está bem ali.
+ 
     @PostMapping
-    public ResponseEntity<Vaga> criar(@RequestBody Vaga nova) {
-        Vaga salva = service.criar(nova);
+    public ResponseEntity<VagaResposta> criar(@Valid @RequestBody VagaEntrada entrada) {
+        VagaResposta salva = servico.criar(entrada);
         URI onde = URI.create("/vagas/" + salva.id());
         return ResponseEntity.created(onde).body(salva);
     }
-
+ 
     @PutMapping("/{id}")
-    public ResponseEntity<Vaga> trocar(@PathVariable String id,
-                                       @RequestBody Vaga nova) {
-        return service.trocar(id, nova)
+    public ResponseEntity<VagaResposta> trocar(@PathVariable String id,
+                                               @Valid @RequestBody VagaEntrada nova) {
+        return servico.trocar(id, nova)
             .map(ResponseEntity::ok)
             .orElse(ResponseEntity.notFound().build());
     }
-
-    // ResponseEntity<Void>: não há corpo nenhum para tipar.
+ 
+    // ResponseEntity<Void>: não há corpo nenhum para tipar. Devolver o objeto
+    // recém-apagado sugeriria que ele ainda está lá.
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> apagar(@PathVariable String id) {
-        return service.apagar(id)
+        return servico.apagar(id)
             ? ResponseEntity.noContent().build()
             : ResponseEntity.notFound().build();
     }
 }
+ 
