@@ -49,12 +49,6 @@ public class EmpresaController {
             : ResponseEntity.notFound().build();
     }
 }
-
-public ResponseEntity<Empresa> criar(@RequestBody Empresa nova) {
-    Empresa salva = service.criar(nova);
-
-    // Na parte 1 o Location aponta para um id que a API inventou.
-    // Aqui aponta para o slug que O CLIENTE escolheu. Mesmo 201,
     // responsabilidade sobre o endereço em lados opostos.
     URI onde = URI.create("/empresas/" + salva.slug());
     return ResponseEntity.created(onde).body(salva);
