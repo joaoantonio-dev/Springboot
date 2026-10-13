@@ -41,10 +41,10 @@ uma é de alguém, e o `git log` é a evidência disso.
 
 | Frente | Recurso | Arquivos |
 | --- | --- | --- |
-| 1 | Vaga | `Vaga`, `VagaEntrada`, `VagaResposta`, `VagaRepository`, `VagaService`, `VagaController` |
-| 2 | Empresa | `Empresa`, `EmpresaRepository`, `EmpresaService`, `EmpresaController` |
-| 3 | Pessoa | `Pessoa`, `PessoaRepository`, `PessoaService`, `PessoaController` |
-| 4 | Busca e números | `EstatisticasService`, `EstatisticasController` — e, na aula 03, `BuscaService` e `BuscaController` |
+| Filipe Fernandes | Vaga | `Vaga`, `VagaEntrada`, `VagaResposta`, `VagaRepository`, `VagaService`, `VagaController` |
+| João Antonio | Empresa | `Empresa`, `EmpresaRepository`, `EmpresaService`, `EmpresaController` |
+| Luis Guilherme | Pessoa | `Pessoa`, `PessoaRepository`, `PessoaService`, `PessoaController` |
+| Guilherme Santana | Busca e números | `EstatisticasService`, `EstatisticasController` — e, na aula 03, `BuscaService` e `BuscaController` |
 
 A frente 4 não tem recurso próprio: ela lê o `VagaRepository` da frente 1. É de
 propósito — buscar é uma responsabilidade, não uma tabela.
