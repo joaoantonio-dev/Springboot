@@ -1,44 +1,22 @@
-### A evidência da frente 3 — aula 03
-#
-# Este arquivo inteiro é da aula 03, e por isso está comentado: as rotas que
-# ele chama ainda não existem no código. Descomente quando a frente 3 ativar o
-# bloco da aula 03 no PessoaService e no PessoaController.
-#
-# Idempotente é sobre o ESTADO DO SERVIDOR, não sobre a resposta. Rode cada
-# bloco duas vezes seguidas e compare o que mudou no servidor — não o número
-# que voltou.
+### 1 · POST duas vezes — NÃO é idempotente
+POST http://localhost:8080/pessoas
+Content-Type: application/json
 
-# ### 1 · POST duas vezes — NÃO é idempotente
-# POST http://localhost:8080/pessoas
-# Content-Type: application/json
-#
-# { "nome": "Ana", "email": "ana@exemplo.com", "area": "Front-end", "senioridade": "Júnior" }
-#
-# # 1ª vez: 201 Created, com um id
-# # 2ª vez: 201 Created, com OUTRO id  <- existem duas Anas agora
-# # Repetir criou coisa nova. É por isso que site bem-feito desabilita o botão
-# # depois do clique.
-#
-# ### 2 · PUT duas vezes — é idempotente
-# # Troque o 1 pelo id que voltou no POST acima, se quiser testar numa criada.
-# PUT http://localhost:8080/pessoas/1
-# Content-Type: application/json
-#
-# { "nome": "Ana Nogueira", "email": "ana@exemplo.com", "area": "Dados", "senioridade": "Pleno" }
-#
-# # 1ª vez: 200 OK
-# # 2ª vez: 200 OK, e o registro está IDÊNTICO
-# # O estado final é o pedido, tenha a chamada acontecido uma ou dez vezes. É
-# # por isso que dá para repetir um PUT com segurança quando a rede cai no meio.
-#
-# ### 3 · DELETE duas vezes — é idempotente
-# DELETE http://localhost:8080/pessoas/1
-#
-# # 1ª vez: 204 No Content
-# # 2ª vez: 404 Not Found
-# # As respostas DIFEREM; o estado NÃO — a pessoa 1 não existe nas duas.
-# # O 404 da segunda chamada não quebra a idempotência: ela é sobre o servidor,
-# # não sobre o que ele responde.
-#
-# ### 4 · confira o estado, que é o que importa
-# GET http://localhost:8080/pessoas
+{ "nome": "Ana", "email": "ana@exemplo.com" }
+
+// 1ª: 201 Created · id a1b2
+// 2ª: 201 Created · id c3d4  ← existem DUAS Anas agora
+
+### 2 · PUT duas vezes — é idempotente
+PUT http://localhost:8080/pessoas/a1b2
+Content-Type: application/json
+
+{ "nome": "Ana Nogueira", "email": "ana@exemplo.com" }
+
+// 1ª: 200 OK · 2ª: 200 OK, e o registro está IDÊNTICO
+
+### 3 · DELETE duas vezes — é idempotente
+DELETE http://localhost:8080/pessoas/a1b2
+
+// 1ª: 204 No Content · 2ª: 404 Not Found
+// As respostas diferem; o ESTADO não — a pessoa não existe nas d
