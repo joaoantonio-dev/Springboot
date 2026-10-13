@@ -49,7 +49,4 @@ public class EmpresaController {
             : ResponseEntity.notFound().build();
     }
 }
-    // responsabilidade sobre o endereço em lados opostos.
-    URI onde = URI.create("/empresas/" + salva.slug());
-    return ResponseEntity.created(onde).body(salva);
-}
+
